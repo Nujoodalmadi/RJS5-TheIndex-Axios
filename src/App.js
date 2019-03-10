@@ -5,6 +5,7 @@ import axios from "axios";
 import Sidebar from "./Sidebar";
 import AuthorsList from "./AuthorsList";
 import AuthorDetail from "./AuthorDetail";
+import { start } from "pretty-error";
 
 class App extends Component {
   state = {
@@ -32,11 +33,16 @@ class App extends Component {
   }
   selectAuthor = async author => {
     this.setState({ loading: true });
-    const response = await axios.get(
-      "https://the-index-api.herokuapp.com/api/authors/" + author.id
-    );
+    try {
+      const response = await axios.get(
+        "https://the-index-api.herokuapp.com/api/authors/" + author.id
+      );
 
-    this.setState({ currentAuthor: response.data, loading: false });
+      this.setState({ currentAuthor: response.data, loading: false });
+    } catch (error) {
+      console.error("there is an error");
+      console.error(error);
+    }
   };
 
   unselectAuthor = () => this.setState({ currentAuthor: null });
